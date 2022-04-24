@@ -51,7 +51,7 @@ public class Simulation extends Thread {
                 for (HashMap.Entry<Integer, Integer> entry : peopleInRoom.entrySet()) {
                     Integer gateNumber = entry.getKey();
                     Integer numberOfPeopleInsideRoom = entry.getValue();
-                    message += "Room With Gate Number : "+ gateNumber + "has " + numberOfPeopleInsideRoom + " left \n"; 
+                    message += "Room With Gate Number : "+ gateNumber + " has " + numberOfPeopleInsideRoom + " left \n"; 
                 }
                
                 // Updating the UI.

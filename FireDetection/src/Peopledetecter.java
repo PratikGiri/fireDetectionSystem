@@ -11,7 +11,7 @@ public class Peopledetecter implements Runnable{
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        for(int i=1;i<20;i++){
+        for(int i=1;i<buildingMap.numberOfNodes;i++){
             if(buildingMap.idNodeMap.get(i).type.equals("Room")){
                 numberOfPeopleinRoomMap.putIfAbsent(buildingMap.roomGate.get(i).getNodeId(), buildingMap.idNodeMap.get(i).numberOfPeople);
             }

@@ -52,18 +52,18 @@ public class App extends Application {
   public GridPane createGrid(){
     GridPane gridPane = new GridPane();
     int count =1;
-    for(int i=0;i<5;i++){
-        for(int j=0;j<4;j++){
+    for(int i=0;i<Math.sqrt(buldingMap.numberOfNodes);i++){
+        for(int j=0;j<Math.sqrt(buldingMap.numberOfNodes);j++){
             if(buldingMap.idNodeMap.get(count).type.equals("MainGate")){
-              gridPane.add(createCell("()", count), j, i, 1, 1);
+              gridPane.add(createCell("E", count), j, i, 1, 1);
             } else if(buldingMap.idNodeMap.get(count).type.equals("Room")){
-              gridPane.add(createCell("+", count), j, i, 1, 1);
+              gridPane.add(createCell("[]", count), j, i, 1, 1);
             } else if(buldingMap.idNodeMap.get(count).type.equals("Room Gate")){
               gridPane.add(createCell("@", count), j, i, 1, 1);
             } else if (buldingMap.idNodeMap.get(count).type.equals("Road")){
               gridPane.add(createCell("_", count), j, i, 1, 1);
             } else if(buldingMap.idNodeMap.get(count).type.equals("Building Exit")){
-              gridPane.add(createCell("(.)", count), j, i, 1, 1);
+              gridPane.add(createCell("Ex", count), j, i, 1, 1);
             }else if(buldingMap.idNodeMap.get(count).type.equals("cell")){
               gridPane.add(createCell("#", count), j, i, 1, 1);
             }
@@ -91,7 +91,7 @@ public class App extends Application {
     primaryStage.setTitle("Building Bluprint");
     VBox verticalBox = new VBox();
     verticalBox.getChildren().addAll(createGrid(),simulatorResult());
-    Scene scene = new Scene(verticalBox, 400, 300);
+    Scene scene = new Scene(verticalBox, 400, 350);
     startSimulation();
     primaryStage.setScene(scene);
     primaryStage.show();
