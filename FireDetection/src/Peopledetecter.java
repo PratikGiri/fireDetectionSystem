@@ -1,3 +1,5 @@
+package FireDetection.src;
+
 import java.util.HashMap;
 
 public class Peopledetecter implements Runnable{

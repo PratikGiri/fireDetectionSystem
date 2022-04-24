@@ -1,3 +1,5 @@
+package FireDetection.src;
+
 import java.util.HashMap;
 
 import javafx.application.Application;

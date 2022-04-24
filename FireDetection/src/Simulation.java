@@ -1,3 +1,5 @@
+package FireDetection.src;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,6 +59,8 @@ public class Simulation extends Thread {
                 // Updating the UI.
                 Platform.runLater(uiUpdater);
 
+
+
                 if(nodesOnFire.size()>0 ){
                     for (HashMap.Entry<Integer, Node> entry : buildingMap.roomGate.entrySet()) {
                         Integer roomId = entry.getKey();
@@ -69,6 +73,15 @@ public class Simulation extends Thread {
                         
                     }
                 }
+
+                PathFinder pathFinder = new PathFinder(buildingMap, nodesOnFire, 6);
+                /*Call the path finder. Pass the node number from where we need to find the nearest exit.
+                The node number can be calculated from where the people are present
+                 */
+                ArrayList<Integer> path = pathFinder.findRoute(65);
+                System.out.println("Path: " + path);
+
+
             } catch (InterruptedException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
