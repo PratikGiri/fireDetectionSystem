@@ -53,15 +53,20 @@ public class Simulation extends Thread {
                     Integer numberOfPeopleInsideRoom = entry.getValue();
                     message += "Room With Gate Number : "+ gateNumber + "has " + numberOfPeopleInsideRoom + " left \n"; 
                 }
-            
-
+               
                 // Updating the UI.
                 Platform.runLater(uiUpdater);
 
-                if(nodesOnFire.size()>0){
+                if(nodesOnFire.size()>0 ){
                     for (HashMap.Entry<Integer, Node> entry : buildingMap.roomGate.entrySet()) {
                         Integer roomId = entry.getKey();
-                        buildingMap.idNodeMap.get(roomId).numberOfPeople -= 2;
+                        if(buildingMap.idNodeMap.get(roomId).numberOfPeople >0){
+                            buildingMap.idNodeMap.get(roomId).numberOfPeople -= 2;
+                        } 
+                        if(buildingMap.idNodeMap.get(roomId).numberOfPeople <0){
+                            buildingMap.idNodeMap.get(roomId).numberOfPeople = 0;
+                        }
+                        
                     }
                 }
             } catch (InterruptedException e1) {

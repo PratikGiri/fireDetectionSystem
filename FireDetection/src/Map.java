@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
- 
 public class Map {
     Node buildinEntyr;
     int numberOfNodes = 20;
