@@ -1,21 +1,24 @@
-package FireDetection.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
 public class Simulation extends Thread {
     Label result;
     String message;
     int round;
+    ArrayList<Button> btnList;
 
     Map buildingMap;
-    Simulation(Label label, Map map){
+    Simulation(Label label, Map map, ArrayList<Button> buttons){
         this.result = label;
         this.buildingMap = map;
         this.round = 0;
+        this.btnList = buttons;
     }
 
     public void run(){
@@ -55,11 +58,23 @@ public class Simulation extends Thread {
                     Integer numberOfPeopleInsideRoom = entry.getValue();
                     message += "Room With Gate Number : "+ gateNumber + " has " + numberOfPeopleInsideRoom + " left \n"; 
                 }
+
+                //Path Finder
+                PathFinder pathFinder = new PathFinder(buildingMap, nodesOnFire, 6);
+                /*Call the path finder. Pass the node number from where we need to find the nearest exit.
+                The node number can be calculated from where the people are present
+                 */
+                ArrayList<Integer> path = pathFinder.findRoute(56);
+                System.out.println("Path: " + path);
+                for(Button btn: btnList){
+                    btn.setStyle(null);
+                }
+                for(int i: path){
+                    btnList.get(i+1).setStyle("-fx-background-color: #98FB98; ");
+                }
                
                 // Updating the UI.
                 Platform.runLater(uiUpdater);
-
-
 
                 if(nodesOnFire.size()>0 ){
                     for (HashMap.Entry<Integer, Node> entry : buildingMap.roomGate.entrySet()) {
@@ -74,12 +89,7 @@ public class Simulation extends Thread {
                     }
                 }
 
-                PathFinder pathFinder = new PathFinder(buildingMap, nodesOnFire, 6);
-                /*Call the path finder. Pass the node number from where we need to find the nearest exit.
-                The node number can be calculated from where the people are present
-                 */
-                ArrayList<Integer> path = pathFinder.findRoute(65);
-                System.out.println("Path: " + path);
+                
 
 
             } catch (InterruptedException e1) {

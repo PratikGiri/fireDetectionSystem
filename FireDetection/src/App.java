@@ -1,5 +1,5 @@
-package FireDetection.src;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -24,30 +24,60 @@ public class App extends Application {
 
     Map buldingMap = new Map();
     Label resultLabel = new Label();
+    ArrayList<Button> btnList = new ArrayList<>();
     public static void main(String[] args) {
       launch(args);
     }
 
+  public void setIcon(String path, Button btn){
+    Image img = new Image(path);
+    ImageView view = new ImageView(img);
+    view.setPreserveRatio(true);
+    btn.setGraphic(view);
+  }
   public Button createCell(String text, int count){
     Button btn = new Button();
     int id = count;
     App that = this;
-    btn.setText(text);
+
+    if(text.equals("#")){
+      setIcon("wall.png", btn);
+    }
+    if(text.equals("_")){
+      setIcon("road.png", btn);
+    }
+    if(text.equals("[]")){ //room
+      setIcon("room.png", btn);
+    }
+    if(text.equals("@")){ // roomgate
+      setIcon("roomgate.png", btn);
+    }
+    if(text.equals("Ex")){ // roomgate
+      setIcon("fire-exit.png", btn);
+    }
+    if(text.equals("E")){ // roomgate
+      setIcon("gate.png", btn);
+    }
+
+   // btn.setText(text);
     btn.setTooltip(new Tooltip(that.buldingMap.idNodeMap.get(id).numberOfPeople+""));
     btn.setOnAction(new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             that.buldingMap.idNodeMap.get(id).setSmokeLevel(2.0);
             that.buldingMap.idNodeMap.get(id).setTemperature(100.0);
-           /* Image img = new Image("https://w7.pngwing.com/pngs/206/654/png-transparent-burning-fire-combustion-raging-fire-flames.png");
+            Image img = new Image("fire.png");
             ImageView view = new ImageView(img);
             view.setPreserveRatio(true);
-            btn.setGraphic(view);*/
+            btn.setGraphic(view);
       
             System.out.println(text);
             //Simulator.simulate
         }
     });
+
+    btn.setMinWidth(100);
+    btnList.add(btn);
     return btn;
   }
 
@@ -72,6 +102,7 @@ public class App extends Application {
             count++;
         }
     }
+    //gridPane.setHgap(10);
     return gridPane;
   }
 
@@ -83,7 +114,7 @@ public class App extends Application {
   }
 
   public void startSimulation(){
-    Simulation simulator = new Simulation(resultLabel, buldingMap);
+    Simulation simulator = new Simulation(resultLabel, buldingMap, btnList);
     simulator.start();
   }
 
@@ -92,6 +123,8 @@ public class App extends Application {
   public void start(Stage primaryStage) throws Exception {
     primaryStage.setTitle("Building Bluprint");
     VBox verticalBox = new VBox();
+    // This button is added just to normalize the indexes of button and path finder.
+    btnList.add(new Button("Random"));
     verticalBox.getChildren().addAll(createGrid(),simulatorResult());
     Scene scene = new Scene(verticalBox, 400, 350);
     startSimulation();

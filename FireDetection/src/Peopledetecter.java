@@ -1,4 +1,3 @@
-package FireDetection.src;
 
 import java.util.HashMap;
 
