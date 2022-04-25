@@ -1,5 +1,3 @@
-package FireDetection.src;
-
 import java.util.ArrayList;
 
 public class Node {

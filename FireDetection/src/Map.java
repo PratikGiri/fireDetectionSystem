@@ -1,4 +1,3 @@
-package FireDetection.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,15 +137,15 @@ public class Map {
     public boolean addNodeToMap(int node){
         String type = this.nodeTypeMap.getOrDefault(node, "cell");
         int capacity=0, numberOfPeople=0;
-        if(type.equals("cells")){
+        if(type.equals("cell")){
             capacity =0;
             numberOfPeople =0;
         } else if(type.equals("MainGate")){
             capacity =10;
             numberOfPeople =0;
         } else if(type.equals("Room")){
-            capacity =30;
-            numberOfPeople =19;
+            capacity =130;
+            numberOfPeople = 65;
         } else if(type.equals("Room Gate")){
             capacity =5;
             numberOfPeople =0;

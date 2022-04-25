@@ -1,10 +1,8 @@
-package FireDetection.src;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class PathFinder {
+public class PathFinder implements Runnable {
 	int count = 0;
 	int [][]dir = {{1,0},{0,1},{-1,0},{0,-1}};
 	Queue<Integer> q = new LinkedList<>();
@@ -15,22 +13,23 @@ public class PathFinder {
 	private static int cols = 10;
 	private static int rows = 10;
 
+	Map buildingMap;
+
 	private ArrayList<Integer> route = new ArrayList<>();
 
 	public PathFinder(Map map, ArrayList<Integer> nodesOnFire, int numberOfEntryAndExits ) {
 		exits = new int[numberOfEntryAndExits];
 		this.Mark = buildMark(map, nodesOnFire);
-
+		this.buildingMap = map;
 	}
 //
 	private static int[][] buildMark(Map map, ArrayList<Integer> nodesOnFire){
-
 		int [][] newMap = new int[rows][cols];
 		int count = 0;
 		for(int i = 0; i< rows; i++) {
 			for(int j = 0; j< cols; j++) {
 
-				if(map.idNodeMap.get(i*cols+j+1).type.equals("cell")){
+				if(map.idNodeMap.get(i*cols+j+1).type.equals("cell") || map.idNodeMap.get(i*cols+j+1).type.equals("Room")){
 					newMap[i][j] = -1;   // -1 -> A blocked cell like fire or wall
 				}else if(map.idNodeMap.get(i*cols+j+1).type.equals("MainGate") || map.idNodeMap.get(i*cols+j+1).type.equals("Building Exit")){
 					exits[count] = i*cols+j;
@@ -84,10 +83,10 @@ public class PathFinder {
 		return -1;
 	}
 
-	public ArrayList<Integer> findRoute(int start){
+	public void findRoute(int start){
 		start = start -1;
 		int nearestExit = bfs(start, exits);
-		if(nearestExit == -1) return new ArrayList<>();
+		if(nearestExit == -1) route = new ArrayList<>();
 		int step = Mark[nearestExit/cols][nearestExit%cols];
 		route.add(nearestExit+1);
 		int curi = nearestExit/cols, curj = nearestExit%cols;
@@ -105,6 +104,27 @@ public class PathFinder {
 				}
 			}
 		}
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		findRoute(57);
+		boolean isReRouteNeeded = true;
+		for(int i: route){
+			if(!(buildingMap.idNodeMap.get(i).capacity == buildingMap.idNodeMap.get(i).numberOfPeople)){
+				isReRouteNeeded = false;
+			}
+		}
+
+		if(isReRouteNeeded){
+			System.out.println("Rerouting ***");
+			int index = route.get(0);
+			buildingMap.idNodeMap.get(index).type = "cell";
+			findRoute(57);
+		}
+	} 
+
+	public ArrayList<Integer> getPath(){
 		return route;
 	}
 	

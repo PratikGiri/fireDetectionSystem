@@ -1,4 +1,3 @@
-package FireDetection.src;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ public class Firedectector implements Runnable {
     }
 
     public ArrayList<Integer> getAllNodesOnFire(){
-        System.out.println(nodesOnFire.size());
+        System.out.println("Number of Nodes on Fire: " + nodesOnFire.size());
         return nodesOnFire;
     
     }

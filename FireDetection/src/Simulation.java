@@ -1,5 +1,3 @@
-package FireDetection.src;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +20,35 @@ public class Simulation extends Thread {
         this.btnList = buttons;
     }
 
+    public void handleRealTimePathDetections(ArrayList<Integer> nodesOnFire) throws InterruptedException{
+         //Path Finder Work
+         PathFinder pathFinder = new PathFinder(buildingMap, nodesOnFire, 6);
+         Thread pathFinderThread = new Thread(pathFinder);
+         pathFinderThread.start();
+        
+         pathFinderThread.join();
+         ArrayList<Integer> path = pathFinder.getPath();
+         
+         // Simulation for People walking.
+         int pathIndex = 0;
+         while(pathIndex<path.size()){
+            if(buildingMap.idNodeMap.get(path.get(pathIndex)).numberOfPeople == 0){
+                buildingMap.idNodeMap.get(path.get(pathIndex)).numberOfPeople = 5;
+                break;
+            }
+            pathIndex++;
+         }
+        
+         // Highlighting path.
+         for(Button btn: btnList){
+             btn.setStyle(null);
+         }
+         for(int i: path){
+             btnList.get(i).setStyle("-fx-background-color: #98FB98; ");
+         }
+         pathFinderThread.interrupt();;
+    }
+
     public void run(){
         Runnable uiUpdater = new Runnable() {
             public void run(){
@@ -29,7 +56,9 @@ public class Simulation extends Thread {
             }
         };
         while(true){
+            int peopleLeft=65 ;
             this.round++;
+            System.out.println();
             System.out.println("Round: "+round);
             System.out.println("----------------------------");
             message = "---------------------------Round "+ round +" ---------------------------------\n";
@@ -57,23 +86,14 @@ public class Simulation extends Thread {
                 for (HashMap.Entry<Integer, Integer> entry : peopleInRoom.entrySet()) {
                     Integer gateNumber = entry.getKey();
                     Integer numberOfPeopleInsideRoom = entry.getValue();
-                    message += "Room With Gate Number : "+ gateNumber + " has " + numberOfPeopleInsideRoom + " left \n"; 
+                    message += "Room With Gate Number : "+ gateNumber + " has following number of people " + numberOfPeopleInsideRoom + " left \n"; 
                 }
 
-                //Path Finder
-                PathFinder pathFinder = new PathFinder(buildingMap, nodesOnFire, 6);
-                /*Call the path finder. Pass the node number from where we need to find the nearest exit.
-                The node number can be calculated from where the people are present
-                 */
-                ArrayList<Integer> path = pathFinder.findRoute(56);
-                System.out.println("Path: " + path);
-                for(Button btn: btnList){
-                    btn.setStyle(null);
+                if(nodesOnFire.size() >0 && peopleLeft > 0){
+                    handleRealTimePathDetections(nodesOnFire);
                 }
-                for(int i: path){
-                    btnList.get(i).setStyle("-fx-background-color: #98FB98; ");
-                }
-               
+
+                
                 // Updating the UI.
                 Platform.runLater(uiUpdater);
 
@@ -81,13 +101,17 @@ public class Simulation extends Thread {
                     for (HashMap.Entry<Integer, Node> entry : buildingMap.roomGate.entrySet()) {
                         Integer roomId = entry.getKey();
                         if(buildingMap.idNodeMap.get(roomId).numberOfPeople >0){
-                            buildingMap.idNodeMap.get(roomId).numberOfPeople -= 2;
+                            buildingMap.idNodeMap.get(roomId).numberOfPeople -= 5;
                         } 
                         if(buildingMap.idNodeMap.get(roomId).numberOfPeople <0){
                             buildingMap.idNodeMap.get(roomId).numberOfPeople = 0;
                         }
-                        
+                        peopleLeft =  buildingMap.idNodeMap.get(roomId).numberOfPeople;
                     }
+                    if(peopleLeft>0)
+                        System.out.println("Status :: People Evacuating.");
+                    else   
+                        System.out.println("Status :: All People Evacuated !!");
                 }
 
                 
@@ -99,11 +123,13 @@ public class Simulation extends Thread {
             }
            
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            fireDetectionThread.interrupt();;
+            peopleDetectorThread.interrupt();
         }
         
     }

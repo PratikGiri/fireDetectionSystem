@@ -1,4 +1,4 @@
-package FireDetection.src;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,12 +72,12 @@ public class App extends Application {
             view.setPreserveRatio(true);
             btn.setGraphic(view);
       
-            System.out.println(text);
+           // System.out.println(text);
             //Simulator.simulate
         }
     });
 
-    btn.setMinWidth(100);
+    btn.setMinWidth(80);
     btnList.add(btn);
     return btn;
   }
@@ -127,7 +127,7 @@ public class App extends Application {
     // This button is added just to normalize the indexes of button and path finder.
     btnList.add(new Button("Random"));
     verticalBox.getChildren().addAll(createGrid(),simulatorResult());
-    Scene scene = new Scene(verticalBox, 400, 350);
+    Scene scene = new Scene(verticalBox, 600, 400);
     startSimulation();
     primaryStage.setScene(scene);
     primaryStage.show();
