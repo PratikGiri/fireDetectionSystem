@@ -1,3 +1,4 @@
+package FireDetection.src;
 
 import java.util.ArrayList;
 

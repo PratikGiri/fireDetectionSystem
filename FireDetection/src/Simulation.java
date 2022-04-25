@@ -1,3 +1,4 @@
+package FireDetection.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class Simulation extends Thread {
                     btn.setStyle(null);
                 }
                 for(int i: path){
-                    btnList.get(i+1).setStyle("-fx-background-color: #98FB98; ");
+                    btnList.get(i).setStyle("-fx-background-color: #98FB98; ");
                 }
                
                 // Updating the UI.

@@ -1,3 +1,4 @@
+package FireDetection.src;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,8 +40,9 @@ public class PathFinder {
 		}
 
 		for(int i=0; i< nodesOnFire.size(); i++){
-			int r = nodesOnFire.get(i)/cols;
-			int c = nodesOnFire.get(i)%cols;
+			int temp = nodesOnFire.get(i)-1;
+			int r = temp/cols;
+			int c = temp%cols;
 
 			newMap[r][c] = -1;
 		}
@@ -83,10 +85,11 @@ public class PathFinder {
 	}
 
 	public ArrayList<Integer> findRoute(int start){
+		start = start -1;
 		int nearestExit = bfs(start, exits);
-
+		if(nearestExit == -1) return new ArrayList<>();
 		int step = Mark[nearestExit/cols][nearestExit%cols];
-		route.add(nearestExit);
+		route.add(nearestExit+1);
 		int curi = nearestExit/cols, curj = nearestExit%cols;
 		int tempi, tempj;
 		while(--step>0) {
@@ -95,7 +98,7 @@ public class PathFinder {
 				tempj = curj + dir[t][1];
 				if(inBound(tempi,tempj) && Mark[tempi][tempj] == step) {
 					int newCor = tempi *cols +tempj;
-					route.add(newCor);
+					route.add(newCor+1);
 					curi = tempi;
 					curj = tempj;
 					break;
