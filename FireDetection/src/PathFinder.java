@@ -86,7 +86,7 @@ public class PathFinder implements Runnable {
 	public void findRoute(int start){
 		start = start -1;
 		int nearestExit = bfs(start, exits);
-		if(nearestExit == -1) route = new ArrayList<>();
+		if(nearestExit == -1) {route = new ArrayList<>(); return;};
 		int step = Mark[nearestExit/cols][nearestExit%cols];
 		route.add(nearestExit+1);
 		int curi = nearestExit/cols, curj = nearestExit%cols;
@@ -118,9 +118,11 @@ public class PathFinder implements Runnable {
 
 		if(isReRouteNeeded){
 			System.out.println("Rerouting ***");
-			int index = route.get(0);
-			buildingMap.idNodeMap.get(index).type = "cell";
-			findRoute(57);
+			if(route.size()>0){
+				int index = route.get(0);
+				buildingMap.idNodeMap.get(index).type = "cell";
+				findRoute(57);
+			}
 		}
 	} 
 

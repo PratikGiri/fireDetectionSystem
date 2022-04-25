@@ -10,7 +10,7 @@ public class Firedectector implements Runnable {
     @Override
     public void run() {
         for(int i=1;i<=buildingMap.numberOfNodes;i++){
-            if(buildingMap.idNodeMap.get(i).getTemperature() > 1.0 && buildingMap.idNodeMap.get(i).getSmoke() > 0.6){
+            if(buildingMap.idNodeMap.get(i).getTemperature() > 70.0 && buildingMap.idNodeMap.get(i).getSmoke() > 2.6){
                nodesOnFire.add(i);
             }
         }

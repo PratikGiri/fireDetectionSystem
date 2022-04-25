@@ -65,7 +65,7 @@ public class App extends Application {
     btn.setOnAction(new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            that.buldingMap.idNodeMap.get(id).setSmokeLevel(2.0);
+            that.buldingMap.idNodeMap.get(id).setSmokeLevel(3.0);
             that.buldingMap.idNodeMap.get(id).setTemperature(100.0);
             Image img = new Image("fire.png");
             ImageView view = new ImageView(img);
@@ -127,7 +127,7 @@ public class App extends Application {
     // This button is added just to normalize the indexes of button and path finder.
     btnList.add(new Button("Random"));
     verticalBox.getChildren().addAll(createGrid(),simulatorResult());
-    Scene scene = new Scene(verticalBox, 600, 400);
+    Scene scene = new Scene(verticalBox, 850, 500);
     startSimulation();
     primaryStage.setScene(scene);
     primaryStage.show();

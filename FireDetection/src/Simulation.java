@@ -11,7 +11,7 @@ public class Simulation extends Thread {
     String message;
     int round;
     ArrayList<Button> btnList;
-
+    int pathSize=0 ;
     Map buildingMap;
     Simulation(Label label, Map map, ArrayList<Button> buttons){
         this.result = label;
@@ -28,7 +28,7 @@ public class Simulation extends Thread {
         
          pathFinderThread.join();
          ArrayList<Integer> path = pathFinder.getPath();
-         
+         this.pathSize = path.size();
          // Simulation for People walking.
          int pathIndex = 0;
          while(pathIndex<path.size()){
@@ -97,10 +97,10 @@ public class Simulation extends Thread {
                 // Updating the UI.
                 Platform.runLater(uiUpdater);
 
-                if(nodesOnFire.size()>0 ){
+                if(nodesOnFire.size()>0){
                     for (HashMap.Entry<Integer, Node> entry : buildingMap.roomGate.entrySet()) {
                         Integer roomId = entry.getKey();
-                        if(buildingMap.idNodeMap.get(roomId).numberOfPeople >0){
+                        if(buildingMap.idNodeMap.get(roomId).numberOfPeople >0 && pathSize>0){
                             buildingMap.idNodeMap.get(roomId).numberOfPeople -= 5;
                         } 
                         if(buildingMap.idNodeMap.get(roomId).numberOfPeople <0){
@@ -108,14 +108,18 @@ public class Simulation extends Thread {
                         }
                         peopleLeft =  buildingMap.idNodeMap.get(roomId).numberOfPeople;
                     }
-                    if(peopleLeft>0)
+                    if(peopleLeft>0 && pathSize >0)
                         System.out.println("Status :: People Evacuating.");
-                    else   
-                        System.out.println("Status :: All People Evacuated !!");
+                    else if(pathSize<=0){
+                        if(peopleLeft>0)
+                         System.out.println("Status :: People Stuck.");
+                        else
+                         System.out.println("Status :: All People Evacuated !!");
+                    }
+                    else 
+                     System.out.println("Status :: All People Evacuated !!");  
+                        
                 }
-
-                
-
 
             } catch (InterruptedException e1) {
                 // TODO Auto-generated catch block
